@@ -23,7 +23,8 @@
 #include <linux/slab.h>
 #include <linux/uaccess.h>
 #include <linux/xattr.h>
-#include <uapi/linux/overlayfs.h>
+/* This module's ABI header, never a copy that may be in the kernel tree */
+#include "../include/uapi/linux/overlayfs.h"
 #include "overlayfs.h"
 
 /**
