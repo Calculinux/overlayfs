@@ -1,26 +1,17 @@
-# Calculinux overlayfs
+# Calculinux overlayfs module
 
-overlayfs built as an out-of-tree `overlay.ko`, carrying the Calculinux
-upper-layer ioctls (`OVL_IOC_UPPER_STATE`, `OVL_IOC_IS_RESTORABLE`,
-`OVL_IOC_RESTORE_LOWER`) that `calculinux-update` uses to reconcile
-packages installed in the overlay with a new base image.
+This branch builds overlayfs as an out-of-tree `overlay.ko` with the
+Calculinux upper-layer ioctls, for the kernel series in the branch name.
+The ioctl ABI, the `ovl-restore` tool and the documentation are on the
+`main` branch; the list of branches is in its README.
 
-Each branch tracks one kernel series. The first commit on a branch is the
-unmodified `fs/overlayfs` from the kernel that branch targets; Calculinux
-changes are the commits on top, so `git log -p <import>..` shows the whole
-delta.
-
-| Branch | Kernel | Used by |
-|---|---|---|
-| `linux-6.12` | linux-yocto v6.12.38 (walnascar) | `calculinux-qemuarm` / calculinux-emulator |
-
-The Luckfox Lyra's 6.1 Rockchip kernel carries the same change in-tree
-(Calculinux/luckfox-linux-6.1-rk3506).
+The first commit on this branch is the unmodified `fs/overlayfs` from the
+target kernel; `git log -p <import>..` shows the Calculinux delta.
 
 ## Layout
 
 - `overlayfs/`: `fs/overlayfs` from the target kernel, plus `ioctl.c`
-- `include/uapi/linux/overlayfs.h`: the ioctl ABI
+- `include/uapi/linux/overlayfs.h`: copy of the ABI header on `main`
 - `Kbuild`, `Makefile`: out-of-tree build; `Kbuild` also sets the
   `CONFIG_OVERLAY_FS_*` feature options
 
@@ -40,15 +31,6 @@ make KERNEL_SRC=... modules_install INSTALL_MOD_PATH=/path/to/rootfs
 1. Replace `overlayfs/` with the new kernel's `fs/overlayfs` in a commit
    that touches nothing else (on a new branch for a new series).
 2. Re-apply the Calculinux commits and fix API drift.
-3. Build against the new kernel and run the emulator update tests.
-
-## ABI
-
-See `include/uapi/linux/overlayfs.h`. The ioctls may be issued on any file
-or directory of the overlay:
-
-| ioctl | Number |
-|---|---|
-| `OVL_IOC_RESTORE_LOWER` | `0x40104f01` |
-| `OVL_IOC_IS_RESTORABLE` | `0x40104f02` |
-| `OVL_IOC_UPPER_STATE` | `0xc0204f03` |
+3. Build against the new kernel and run
+   `.github/scripts/qemu-overlay-test.py` from meta-calculinux in the
+   emulator (or on the device for kernels the emulator does not run).
