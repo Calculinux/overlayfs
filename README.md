@@ -23,6 +23,7 @@ shows the whole delta.
 |---|---|---|
 | `linux-6.1` | Calculinux/luckfox-linux-6.1-rk3506 (Rockchip 6.1) | `luckfox-lyra` |
 | `linux-6.12` | linux-yocto v6.12.38 (walnascar) | `calculinux-qemuarm` / calculinux-emulator |
+| `linux-6.18` | linux-yocto v6.18.24 (wrynose) | `calculinux-qemuarm` on wrynose |
 
 Each module branch carries a copy of the uapi header; keep it identical to
 the one on `main`.
