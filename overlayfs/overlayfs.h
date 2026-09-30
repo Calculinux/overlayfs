@@ -913,6 +913,9 @@ struct ovl_fh *ovl_get_origin_fh(struct ovl_fs *ofs, struct dentry *origin);
 int ovl_set_origin_fh(struct ovl_fs *ofs, const struct ovl_fh *fh,
 		      struct dentry *upper);
 
+/* ioctl.c */
+long ovl_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
+
 /* export.c */
 extern const struct export_operations ovl_export_operations;
 extern const struct export_operations ovl_export_fid_operations;
